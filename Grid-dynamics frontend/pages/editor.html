@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Editor de topología de microrred — Grid Dynamics. Diseña y conecta nodos energéticos con drag & drop.">
+  <title>Editor de Topología — Grid Dynamics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+<div class="ambient-orb ambient-orb-1" aria-hidden="true"></div>
+<div class="ambient-orb ambient-orb-2" aria-hidden="true"></div>
+
+<div class="app-layout">
+
+  <!-- TOPBAR -->
+  <header class="topbar" role="banner">
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir navegación" aria-expanded="false">
+      <i data-lucide="menu"></i>
+    </button>
+    <a href="dashboard.html" class="topbar-logo" aria-label="Grid Dynamics — Inicio">
+      <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="var(--cyan)" stroke-width="1.5"/>
+        <path d="M18 10 L22 16 L20 16 L20 26 L16 26 L16 16 L14 16 Z" fill="var(--cyan)"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-name">GRID</span>
+        <span class="logo-sub">DYNAMICS</span>
+      </div>
+    </a>
+    <nav class="topbar-nav" aria-label="Navegación principal">
+      <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="projects.html" class="topnav-link"><i data-lucide="folder"></i>Proyectos</a>
+      <a href="editor.html" class="topnav-link active"><i data-lucide="network"></i>Editor</a>
+      <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+      <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+      <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+      <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" id="save-topology-btn" style="font-size:var(--text-sm)">
+        <i data-lucide="save"></i>Guardar
+      </button>
+      <button class="btn btn-ghost" id="export-topology-btn" style="font-size:var(--text-sm)" title="Exportar topología como JSON">
+        <i data-lucide="download"></i>Exportar
+      </button>
+      <a href="simulate.html" class="btn btn-primary" style="font-size:var(--text-sm)">
+        <i data-lucide="zap"></i>Simular
+      </a>
+      <div class="user-chip" id="user-chip" role="button" tabindex="0" aria-label="Menú de usuario" aria-haspopup="true">
+        <div class="user-avatar"><i data-lucide="user"></i></div>
+        <div class="user-chip-info">
+          <strong data-user-name>Cargando...</strong>
+          <span data-user-role>Rol</span>
+        </div>
+        <i data-lucide="chevron-down" class="chevron"></i>
+        <div class="user-dropdown" role="menu">
+          <div class="user-dropdown-header" data-user-name>—</div>
+          <a href="settings.html" class="user-dropdown-item" role="menuitem">
+            <i data-lucide="settings"></i>Configuración
+          </a>
+          <div class="user-dropdown-divider"></div>
+          <button class="user-dropdown-item danger" data-action="logout" role="menuitem">
+            <i data-lucide="log-out"></i>Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile nav drawer -->
+  <nav class="nav-drawer" id="nav-drawer" aria-label="Navegación móvil">
+    <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+    <a href="projects.html" class="topnav-link"><i data-lucide="folder"></i>Proyectos</a>
+    <a href="editor.html" class="topnav-link active"><i data-lucide="network"></i>Editor</a>
+    <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+    <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+    <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+    <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+    <div class="nav-drawer-divider"></div>
+    <a href="settings.html" class="topnav-link"><i data-lucide="settings"></i>Configuración</a>
+  </nav>
+
+  <!-- EDITOR LAYOUT -->
+  <main class="editor-layout" id="main">
+
+    <!-- Panel izquierdo: paleta de componentes -->
+    <aside class="editor-sidebar-l" aria-label="Componentes disponibles">
+      <div class="component-palette">
+        <h4>Generación</h4>
+        <div class="palette-item" draggable="true" data-type="solar" role="button" tabindex="0" aria-label="Agregar panel solar">
+          <i data-lucide="sun"></i><span>Panel Solar</span>
+        </div>
+        <div class="palette-item" draggable="true" data-type="wind" role="button" tabindex="0" aria-label="Agregar aerogenerador">
+          <i data-lucide="wind"></i><span>Aerogenerador</span>
+        </div>
+        <h4 style="margin-top:var(--space-4)">Almacenamiento</h4>
+        <div class="palette-item" draggable="true" data-type="battery" role="button" tabindex="0" aria-label="Agregar batería">
+          <i data-lucide="battery-charging"></i><span>Batería</span>
+        </div>
+        <h4 style="margin-top:var(--space-4)">Carga</h4>
+        <div class="palette-item" draggable="true" data-type="house" role="button" tabindex="0" aria-label="Agregar vivienda">
+          <i data-lucide="home"></i><span>Vivienda</span>
+        </div>
+        <div class="palette-item" draggable="true" data-type="load" role="button" tabindex="0" aria-label="Agregar carga genérica">
+          <i data-lucide="zap"></i><span>Carga Genérica</span>
+        </div>
+        <h4 style="margin-top:var(--space-4)">Conexión</h4>
+        <div class="palette-item" draggable="true" data-type="grid" role="button" tabindex="0" aria-label="Agregar red eléctrica">
+          <i data-lucide="plug"></i><span>Red Eléctrica</span>
+        </div>
+        <div class="palette-item" draggable="true" data-type="transformer" role="button" tabindex="0" aria-label="Agregar transformador">
+          <i data-lucide="git-fork"></i><span>Transformador</span>
+        </div>
+      </div>
+
+      <!-- Controles de canvas -->
+      <div style="margin-top:auto;padding-top:var(--space-4);border-top:1px solid var(--border)">
+        <p style="font-size:var(--text-xs);color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:var(--space-3)">Canvas</p>
+        <button class="palette-item" style="cursor:pointer;width:100%" id="import-topology-btn" aria-label="Importar topología JSON">
+          <i data-lucide="upload"></i><span>Importar JSON</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Canvas central -->
+    <div class="editor-canvas-wrap" id="canvas-container">
+      <div class="editor-toolbar" role="toolbar" aria-label="Herramientas del editor">
+        <button class="editor-tool-btn active" id="tool-select" title="Seleccionar (S)" aria-label="Herramienta de selección">
+          <i data-lucide="mouse-pointer"></i>
+        </button>
+        <button class="editor-tool-btn" id="tool-connect" title="Conectar nodos (C)" aria-label="Herramienta de conexión">
+          <i data-lucide="cable"></i>
+        </button>
+        <div style="width:1px;background:var(--border);margin:4px 2px"></div>
+        <button class="editor-tool-btn" id="tool-delete" title="Eliminar (Del)" aria-label="Eliminar elemento">
+          <i data-lucide="trash-2"></i>
+        </button>
+        <button class="editor-tool-btn" id="tool-clear" title="Limpiar todo" aria-label="Limpiar canvas">
+          <i data-lucide="eraser"></i>
+        </button>
+        <div style="width:1px;background:var(--border);margin:4px 2px"></div>
+        <button class="editor-tool-btn" id="tool-zoom-in" title="Zoom + (Ctrl +)" aria-label="Acercar">
+          <i data-lucide="zoom-in"></i>
+        </button>
+        <button class="editor-tool-btn" id="tool-zoom-out" title="Zoom - (Ctrl -)" aria-label="Alejar">
+          <i data-lucide="zoom-out"></i>
+        </button>
+        <button class="editor-tool-btn" id="tool-fit" title="Ajustar a pantalla" aria-label="Ajustar vista">
+          <i data-lucide="maximize-2"></i>
+        </button>
+        <div style="width:1px;background:var(--border);margin:4px 2px"></div>
+        <button class="editor-tool-btn" id="tool-undo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer">
+          <i data-lucide="undo-2"></i>
+        </button>
+        <button class="editor-tool-btn" id="tool-redo" title="Rehacer (Ctrl+Y)" aria-label="Rehacer">
+          <i data-lucide="redo-2"></i>
+        </button>
+      </div>
+      <!-- Node count display -->
+      <div style="position:absolute;bottom:var(--space-4);left:var(--space-4);font-size:var(--text-xs);color:var(--text3);font-family:var(--font-mono);background:rgba(8,18,23,0.8);padding:4px 10px;border-radius:var(--radius);border:1px solid var(--border)">
+        Nodos: <span id="node-count">0</span> | Conexiones: <span id="edge-count">0</span>
+      </div>
+      <canvas id="topology-canvas" aria-label="Canvas de topología de microrred" tabindex="0"></canvas>
+    </div>
+
+    <!-- Panel derecho: propiedades -->
+    <aside class="editor-sidebar-r" aria-label="Propiedades del nodo seleccionado">
+      <div class="props-panel">
+        <h4>Propiedades</h4>
+        <div class="no-selection" id="props-empty">
+          <i data-lucide="mouse-pointer-click"></i>
+          <p>Selecciona un nodo para editar sus parámetros</p>
+        </div>
+        <form id="node-props-form" hidden>
+          <div class="form-group">
+            <label class="label" for="node-name">Nombre del nodo</label>
+            <input class="input" type="text" id="node-name" placeholder="Ej: Vivienda A">
+          </div>
+          <div class="form-group">
+            <label class="label" for="node-consumption">Consumo (kWh/día)</label>
+            <input class="input" type="number" id="node-consumption" min="0" step="0.1" placeholder="0.0">
+          </div>
+          <div class="form-group">
+            <label class="label" for="node-capacity">Capacidad generación (kWp)</label>
+            <input class="input" type="number" id="node-capacity" min="0" step="0.1" placeholder="0.0">
+          </div>
+          <div class="form-group">
+            <label class="label" for="node-storage">Almacenamiento (kWh)</label>
+            <input class="input" type="number" id="node-storage" min="0" step="1" placeholder="0">
+          </div>
+          <div class="form-group" style="margin-bottom:var(--space-6)">
+            <label class="label" for="node-cost">Costo instalación (USD)</label>
+            <input class="input" type="number" id="node-cost" min="0" step="100" placeholder="0">
+          </div>
+          <button type="button" class="btn btn-primary" style="width:100%;justify-content:center" id="save-node-btn">
+            <i data-lucide="check"></i>Aplicar cambios
+          </button>
+          <button type="button" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:var(--space-2);color:#ff3250" id="delete-node-btn">
+            <i data-lucide="trash-2"></i>Eliminar nodo
+          </button>
+        </form>
+      </div>
+
+      <!-- Resumen de topología -->
+      <div id="topology-summary" style="margin-top:var(--space-6);border-top:1px solid var(--border);padding-top:var(--space-4)">
+        <p style="font-size:var(--text-xs);color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:var(--space-3)">Resumen</p>
+        <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm)">
+            <span style="color:var(--text2)">Generación total</span>
+            <span id="sum-generation" style="color:var(--cyan);font-family:var(--font-mono)">0 kWp</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm)">
+            <span style="color:var(--text2)">Consumo total</span>
+            <span id="sum-consumption" style="color:var(--text);font-family:var(--font-mono)">0 kWh/d</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm)">
+            <span style="color:var(--text2)">Almacenamiento</span>
+            <span id="sum-storage" style="color:#ffa000;font-family:var(--font-mono)">0 kWh</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<!-- Import JSON modal -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title"><i data-lucide="upload"></i>Importar Topología</div>
+      <button class="modal-close" id="close-import-modal"><i data-lucide="x"></i></button>
+    </div>
+    <p style="font-size:var(--text-sm);color:var(--text2);margin-bottom:var(--space-4)">Pega el JSON de una topología exportada anteriormente:</p>
+    <textarea class="textarea input" id="import-json-input" style="min-height:160px;font-family:var(--font-mono);font-size:12px" placeholder='{"nodes": [...], "edges": [...]}'></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancel-import-btn">Cancelar</button>
+      <button class="btn btn-primary" id="confirm-import-btn"><i data-lucide="upload"></i>Importar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script src="../js/config.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/mock.js"></script>
+<script src="../js/dashboard.js"></script>
+<script src="../js/editor.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    requireAuth('../pages/login.html');
+    lucide.createIcons();
+
+    // Import topology modal
+    const importBtn = document.getElementById('import-topology-btn');
+    const importModal = document.getElementById('import-modal');
+    const closeImport = document.getElementById('close-import-modal');
+    const cancelImport = document.getElementById('cancel-import-btn');
+    const confirmImport = document.getElementById('confirm-import-btn');
+
+    importBtn?.addEventListener('click', () => { importModal.classList.add('open'); lucide.createIcons(); });
+    closeImport?.addEventListener('click', () => importModal.classList.remove('open'));
+    cancelImport?.addEventListener('click', () => importModal.classList.remove('open'));
+    confirmImport?.addEventListener('click', () => {
+      const json = document.getElementById('import-json-input')?.value;
+      try {
+        const topo = JSON.parse(json);
+        if (!topo.nodes) throw new Error('Formato inválido: falta "nodes"');
+        showToast('Topología importada correctamente', 'success');
+        importModal.classList.remove('open');
+        // TODO: load topology into editor canvas
+      } catch(e) {
+        showToast(e.message || 'JSON inválido', 'error');
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+/* ============================================
+   GRID DYNAMICS — Variables CSS
+   Paleta pixel-art / cyberpunk
+   ============================================ */
+@font-face {
+  font-family: 'MinecraftEnchant';
+  src: url('../fonts/minecraft-enchantment.ttf') format('truetype');
+  font-display: swap;
+}
+
+:root {
+  /* Fondos */
+  --bg:       #050a0d;
+  --surface:  #081217;
+  --surface2: rgba(0, 229, 255, 0.03);
+  --sidebar:  #050a0d;
+  --card:     #0a1a20;
+
+  /* Cyan principal */
+  --cyan:      #00e5ff;
+  --cyan-dark: #00838f;
+  --cyan-muted:#00bcd4;
+
+  /* Colores alias */
+  --purple: #00e5ff;
+  --pink:   #00838f;
+  --blue:   #00bcd4;
+  --green:  #00e5ff;
+  --orange: #4dd0e1;
+
+  /* Transparencias de color para backgrounds */
+  --p-purple: rgba(0, 229, 255, 0.10);
+  --p-pink:   rgba(0, 188, 212, 0.10);
+  --p-blue:   rgba(0, 229, 255, 0.05);
+  --p-green:  rgba(0, 229, 255, 0.15);
+  --p-yellow: rgba(77, 208, 225, 0.10);
+  --p-orange: rgba(0, 229, 255, 0.08);
+
+  /* Texto */
+  --text:  #c9e8f0;
+  --text2: #8ab8c4;
+  --text3: #4a7a8a;
+
+  /* Bordes */
+  --border:        rgba(0, 229, 255, 0.18);
+  --border-bright: rgba(0, 229, 255, 0.45);
+
+  /* Sombras */
+  --shadow:    0 0 15px rgba(0, 229, 255, 0.05);
+  --shadow-lg: 0 0 30px rgba(0, 229, 255, 0.12), 0 20px 40px rgba(0,0,0,0.5);
+
+  /* Gradiente de tarjeta */
+  --grad-card: linear-gradient(135deg, rgba(0,229,255,0.02) 0%, transparent 60%);
+
+  /* Radios */
+  --radius:    8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+
+  /* Layout */
+  --sidebar-w: 260px;
+
+  /* Transiciones */
+  --transition:  0.25s ease;
+  --ease-cyber:  cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Tipografía */
+  --font-ui:   'Rajdhani', 'Share Tech Mono', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ench: 'MinecraftEnchant', monospace;
+
+  /* Escala de texto */
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+  --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+  --text-hero: clamp(3rem,     0.5rem  + 7vw,    8rem);
+
+  /* Espaciado */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+}

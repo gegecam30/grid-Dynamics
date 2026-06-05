@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Comparación de escenarios de simulación — Grid Dynamics. Analiza el rendimiento energético lado a lado.">
+  <title>Escenarios — Grid Dynamics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <style>
+    /* ---- SELECTOR GRID ---- */
+    .scenario-selectors-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--space-4);
+      align-items: end;
+      margin-bottom: var(--space-6);
+    }
+    .selector-col { display: flex; flex-direction: column; gap: var(--space-2); }
+    .selector-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .selector-label svg { width: 14px; height: 14px; stroke-width: 2; color: var(--cyan); }
+    .vs-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 2px;
+    }
+    .vs-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-xl);
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- WINNER BANNER ---- */
+    .winner-banner {
+      border: 1px solid rgba(0,229,255,0.35);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5) var(--space-6);
+      background: rgba(0,229,255,0.04);
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .winner-trophy {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+      background: rgba(0,229,255,0.1);
+      border: 1px solid rgba(0,229,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+    .winner-trophy svg { width: 28px; height: 28px; stroke-width: 1.5; }
+    .winner-info { flex: 1; min-width: 0; }
+    .winner-title {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-1);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .winner-desc { font-size: var(--text-sm); color: var(--text2); line-height: 1.6; }
+
+    /* ---- KPI COMPARISON ROW ---- */
+    .kpi-compare-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .kpi-compare-card {
+      background: rgba(10, 26, 32, 0.55);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .kpi-compare-card:hover { border-color: var(--border-bright); }
+    .kpi-compare-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--grad-card);
+      pointer-events: none;
+    }
+    .kpi-compare-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .kpi-compare-label svg { width: 14px; height: 14px; color: var(--cyan); }
+    .kpi-compare-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
+    }
+    .kpi-compare-val {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+    .kpi-compare-val.a { color: var(--cyan); }
+    .kpi-compare-val.b { color: #7c3aed; }
+    .kpi-compare-tag {
+      font-size: var(--text-xs);
+      color: var(--text3);
+      font-weight: 700;
+    }
+    .kpi-compare-divider {
+      height: 1px;
+      background: var(--border);
+      margin: var(--space-2) 0;
+    }
+
+    /* ---- COMPARISON TABLE ---- */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .compare-table th:first-child,
+    .compare-table td:first-child { color: var(--text2); font-weight: 600; }
+    .compare-table .best-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--text-xs);
+      font-weight: 700;
+    }
+    .compare-table .best-cell svg { width: 12px; height: 12px; stroke-width: 2.5; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 900px) {
+      .kpi-compare-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .scenario-selectors-grid { grid-template-columns: 1fr; }
+      .vs-divider { display: none; }
+      .kpi-compare-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 400px) {
+      .kpi-compare-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient orbs -->
+  <div class="ambient-orb ambient-orb-1" aria-hidden="true"></div>
+  <div class="ambient-orb ambient-orb-2" aria-hidden="true"></div>
+
+  <div class="app-layout">
+
+    <!-- TOPBAR -->
+    <header class="topbar" role="banner">
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir navegación" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <a href="dashboard.html" class="topbar-logo" aria-label="Grid Dynamics — Inicio">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="var(--cyan)" stroke-width="1.5"/>
+          <path d="M18 10 L22 16 L20 16 L20 26 L16 26 L16 16 L14 16 Z" fill="var(--cyan)"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">GRID</span>
+          <span class="logo-sub">DYNAMICS</span>
+        </div>
+      </a>
+      <nav class="topbar-nav" aria-label="Navegación principal">
+        <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="projects.html" class="topnav-link"><i data-lucide="folder"></i>Proyectos</a>
+        <a href="editor.html" class="topnav-link"><i data-lucide="network"></i>Editor</a>
+        <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+        <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+        <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+        <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" id="notif-btn" aria-label="Notificaciones">
+          <i data-lucide="bell"></i>
+          <span class="badge-dot" aria-hidden="true"></span>
+        </button>
+        <div class="user-chip" id="user-chip" role="button" tabindex="0" aria-label="Menú de usuario" aria-haspopup="true">
+          <div class="user-avatar"><i data-lucide="user"></i></div>
+          <div class="user-chip-info">
+            <strong data-user-name>Cargando...</strong>
+            <span data-user-role>Rol</span>
+          </div>
+          <i data-lucide="chevron-down" class="chevron"></i>
+          <div class="user-dropdown" role="menu">
+            <div class="user-dropdown-header" data-user-name>—</div>
+            <a href="settings.html" class="user-dropdown-item" role="menuitem">
+              <i data-lucide="settings"></i>Configuración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <button class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <i data-lucide="log-out"></i>Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile nav drawer -->
+    <nav class="nav-drawer" id="nav-drawer" aria-label="Navegación móvil">
+      <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="projects.html" class="topnav-link"><i data-lucide="folder"></i>Proyectos</a>
+      <a href="editor.html" class="topnav-link"><i data-lucide="network"></i>Editor</a>
+      <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+      <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+      <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+      <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+      <div class="nav-drawer-divider"></div>
+      <a href="settings.html" class="topnav-link"><i data-lucide="settings"></i>Configuración</a>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content" id="main">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-info">
+          <h1>Comparar Escenarios</h1>
+          <p>Analiza y compara el rendimiento de diferentes escenarios de simulación lado a lado.</p>
+        </div>
+        <div class="page-header-actions">
+          <span class="badge badge-cyber">
+            <i data-lucide="git-compare"></i> Análisis Comparativo
+          </span>
+        </div>
+      </div>
+
+      <!-- Selector Section -->
+      <section class="section-card" aria-label="Selección de escenarios">
+        <div class="section-title">
+          <i data-lucide="sliders-horizontal"></i>
+          Seleccionar Escenarios
+        </div>
+
+        <div class="scenario-selectors-grid">
+          <!-- Selector A -->
+          <div class="selector-col">
+            <label class="selector-label" for="select-a">
+              <i data-lucide="bar-chart-2"></i>
+              Escenario A
+            </label>
+            <select class="select" id="select-a" aria-label="Seleccionar Escenario A">
+              <option value="">— Selecciona una simulación —</option>
+            </select>
+          </div>
+
+          <!-- VS Badge -->
+          <div class="vs-divider" aria-hidden="true">
+            <div class="vs-badge">VS</div>
+          </div>
+
+          <!-- Selector B -->
+          <div class="selector-col">
+            <label class="selector-label" for="select-b">
+              <i data-lucide="bar-chart"></i>
+              Escenario B
+            </label>
+            <select class="select" id="select-b" aria-label="Seleccionar Escenario B">
+              <option value="">— Selecciona una simulación —</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="compare-btn" style="width:100%;" aria-label="Ejecutar comparación">
+          <i data-lucide="play"></i>
+          Comparar Escenarios
+        </button>
+      </section>
+
+      <!-- Comparison Results (shown by default with mock data) -->
+      <div id="comparison-results">
+
+        <!-- Winner Banner -->
+        <div class="winner-banner glass-card" id="winner-banner" role="status" aria-live="polite">
+          <div class="winner-trophy">
+            <i data-lucide="trophy"></i>
+          </div>
+          <div class="winner-info">
+            <div class="winner-title">
+              <span id="winner-name">Escenario Óptimo: —</span>
+              <span class="winner-badge">
+                <i data-lucide="star"></i>
+                ÓPTIMO
+              </span>
+            </div>
+            <p class="winner-desc" id="winner-desc">Cargando análisis comparativo...</p>
+          </div>
+        </div>
+
+        <!-- KPI Comparison Row -->
+        <div class="kpi-compare-grid" id="kpi-compare-grid">
+          <!-- Eficiencia -->
+          <div class="kpi-compare-card">
+            <div class="kpi-compare-label">
+              <i data-lucide="activity"></i>
+              Eficiencia
+            </div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val a" id="kpi-eff-a">—</span>
+              <span class="kpi-compare-tag">ESC A</span>
+            </div>
+            <div class="kpi-compare-divider"></div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val b" id="kpi-eff-b">—</span>
+              <span class="kpi-compare-tag">ESC B</span>
+            </div>
+          </div>
+          <!-- CO2 -->
+          <div class="kpi-compare-card">
+            <div class="kpi-compare-label">
+              <i data-lucide="leaf"></i>
+              CO₂ Reducido
+            </div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val a" id="kpi-co2-a">—</span>
+              <span class="kpi-compare-tag">ESC A</span>
+            </div>
+            <div class="kpi-compare-divider"></div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val b" id="kpi-co2-b">—</span>
+              <span class="kpi-compare-tag">ESC B</span>
+            </div>
+          </div>
+          <!-- Costo -->
+          <div class="kpi-compare-card">
+            <div class="kpi-compare-label">
+              <i data-lucide="circle-dollar-sign"></i>
+              Costo Total
+            </div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val a" id="kpi-cost-a">—</span>
+              <span class="kpi-compare-tag">ESC A</span>
+            </div>
+            <div class="kpi-compare-divider"></div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val b" id="kpi-cost-b">—</span>
+              <span class="kpi-compare-tag">ESC B</span>
+            </div>
+          </div>
+          <!-- Ahorro -->
+          <div class="kpi-compare-card">
+            <div class="kpi-compare-label">
+              <i data-lucide="piggy-bank"></i>
+              Ahorro
+            </div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val a" id="kpi-save-a">—</span>
+              <span class="kpi-compare-tag">ESC A</span>
+            </div>
+            <div class="kpi-compare-divider"></div>
+            <div class="kpi-compare-row">
+              <span class="kpi-compare-val b" id="kpi-save-b">—</span>
+              <span class="kpi-compare-tag">ESC B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="chart-area" style="margin-bottom: var(--space-6);">
+          <div class="chart-header">
+            <span class="chart-title">
+              <i data-lucide="bar-chart-2" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>
+              Comparación Visual
+            </span>
+            <div class="chart-legend" style="display:flex;gap:var(--space-4);">
+              <span class="legend-dot" style="--c:var(--cyan)">Escenario A</span>
+              <span class="legend-dot" style="--c:#7c3aed">Escenario B</span>
+            </div>
+          </div>
+          <canvas id="compare-chart" height="260" aria-label="Gráfico de barras de comparación de escenarios" role="img"></canvas>
+        </div>
+
+        <!-- Comparison Table -->
+        <section class="section-card" aria-labelledby="compare-table-title">
+          <div class="section-title" id="compare-table-title">
+            <i data-lucide="table-2"></i>
+            Tabla de Métricas Detalladas
+          </div>
+          <div class="table-wrap">
+            <table class="compare-table" id="compare-table" aria-label="Tabla comparativa de métricas">
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th id="th-a">Escenario A</th>
+                  <th id="th-b">Escenario B</th>
+                  <th>Mejor</th>
+                </tr>
+              </thead>
+              <tbody id="compare-tbody">
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+      <!-- /comparison-results -->
+
+    </main>
+  </div>
+
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/mock.js"></script>
+  <script src="../js/scenarios.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      requireAuth('../pages/login.html');
+      lucide.createIcons();
+      await initScenarios();
+    });
+  </script>
+</body>
+</html>
