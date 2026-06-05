@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard principal de Grid Dynamics — Panel de control de proyectos de microrred eléctrica.">
+  <title>Dashboard — Grid Dynamics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+
+  <!-- Ambient orbs -->
+  <div class="ambient-orb ambient-orb-1" aria-hidden="true"></div>
+  <div class="ambient-orb ambient-orb-2" aria-hidden="true"></div>
+
+  <div class="app-layout">
+
+    <!-- TOPBAR -->
+    <header class="topbar" role="banner">
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir navegación" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <a href="dashboard.html" class="topbar-logo" aria-label="Grid Dynamics — Inicio">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="var(--cyan)" stroke-width="1.5"/>
+          <path d="M18 10 L22 16 L20 16 L20 26 L16 26 L16 16 L14 16 Z" fill="var(--cyan)"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">GRID</span>
+          <span class="logo-sub">DYNAMICS</span>
+        </div>
+      </a>
+      <nav class="topbar-nav" aria-label="Navegación principal">
+        <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="projects.html" class="topnav-link"><i data-lucide="folder"></i>Proyectos</a>
+        <a href="editor.html" class="topnav-link"><i data-lucide="network"></i>Editor</a>
+        <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+        <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+        <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+        <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" id="notif-btn" aria-label="Notificaciones">
+          <i data-lucide="bell"></i>
+          <span class="badge-dot" aria-hidden="true"></span>
+        </button>
+        <div class="user-chip" id="user-chip" role="button" tabindex="0" aria-label="Menú de usuario" aria-haspopup="true">
+          <div class="user-avatar"><i data-lucide="user"></i></div>
+          <div class="user-chip-info">
+            <strong data-user-name>Cargando...</strong>
+            <span data-user-role>Rol</span>
+          </div>
+          <i data-lucide="chevron-down" class="chevron"></i>
+          <div class="user-dropdown" role="menu" aria-label="Opciones de usuario">
+            <div class="user-dropdown-header" data-user-name>—</div>
+            <a href="settings.html" class="user-dropdown-item" role="menuitem">
+              <i data-lucide="settings"></i>Configuración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <button class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <i data-lucide="log-out"></i>Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile nav drawer -->
+    <nav class="nav-drawer" id="nav-drawer" aria-label="Navegación móvil">
+      <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="projects.html" class="topnav-link"><i data-lucide="folder"></i>Proyectos</a>
+      <a href="editor.html" class="topnav-link"><i data-lucide="network"></i>Editor</a>
+      <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+      <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+      <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+      <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+      <div class="nav-drawer-divider"></div>
+      <a href="settings.html" class="topnav-link"><i data-lucide="settings"></i>Configuración</a>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content" id="main">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-info">
+          <h1>Panel de Control</h1>
+          <p>Gestiona tus proyectos de microrred y accede a tus simulaciones.</p>
+        </div>
+        <div class="page-header-actions">
+          <a href="editor.html" class="btn btn-primary" id="new-project-btn">
+            <i data-lucide="plus"></i>
+            Nuevo Proyecto
+          </a>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon"><i data-lucide="folder"></i></div>
+          <div class="kpi-label">Proyectos totales</div>
+          <div class="kpi-value" id="kpi-projects"><span class="skeleton" style="height:1em;width:60px;display:inline-block"></span></div>
+          <div class="kpi-trend neutral" id="kpi-projects-trend">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon"><i data-lucide="zap"></i></div>
+          <div class="kpi-label">Simulaciones ejecutadas</div>
+          <div class="kpi-value" id="kpi-sims"><span class="skeleton" style="height:1em;width:60px;display:inline-block"></span></div>
+          <div class="kpi-trend up" id="kpi-sims-trend">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon"><i data-lucide="leaf"></i></div>
+          <div class="kpi-label">CO₂ reducido estimado</div>
+          <div class="kpi-value" id="kpi-co2"><span class="skeleton" style="height:1em;width:80px;display:inline-block"></span></div>
+          <div class="kpi-trend up" id="kpi-co2-trend">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon"><i data-lucide="files"></i></div>
+          <div class="kpi-label">Perfiles CSV cargados</div>
+          <div class="kpi-value" id="kpi-profiles"><span class="skeleton" style="height:1em;width:40px;display:inline-block"></span></div>
+          <div class="kpi-trend neutral" id="kpi-profiles-trend">—</div>
+        </div>
+      </div>
+
+      <!-- Main content grid -->
+      <div class="grid-2" style="margin-bottom:var(--space-8)">
+
+        <!-- Chart: Consumo vs Generación -->
+        <div class="chart-area">
+          <div class="chart-header">
+            <span class="chart-title">Consumo vs. Generación</span>
+            <div class="time-filter" id="time-filter">
+              <button class="time-filter-btn" data-range="1W">1S</button>
+              <button class="time-filter-btn active" data-range="1M">1M</button>
+              <button class="time-filter-btn" data-range="3M">3M</button>
+              <button class="time-filter-btn" data-range="1Y">1A</button>
+              <button class="time-filter-btn" data-range="ALL">ALL</button>
+            </div>
+          </div>
+          <div class="chart-legend" style="margin-bottom:var(--space-4)">
+            <span class="legend-dot" style="--c:var(--cyan)">Generación</span>
+            <span class="legend-dot" style="--c:#7c3aed">Consumo</span>
+            <span class="legend-dot" style="--c:#ffa000">Batería</span>
+          </div>
+          <canvas id="energy-chart" height="220"></canvas>
+        </div>
+
+        <!-- Activity feed -->
+        <div class="chart-area">
+          <div class="chart-header">
+            <span class="chart-title">Actividad Reciente</span>
+            <a href="projects.html" class="btn btn-ghost" style="font-size:var(--text-xs);padding:var(--space-1) var(--space-3)">
+              Ver todo <i data-lucide="arrow-right" style="width:14px;height:14px"></i>
+            </a>
+          </div>
+          <div id="activity-feed" class="alert-panel"></div>
+        </div>
+      </div>
+
+      <!-- Proyectos recientes -->
+      <section aria-labelledby="projects-section-title">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4)">
+          <h2 id="projects-section-title" style="font-size:var(--text-lg)">Proyectos Recientes</h2>
+          <a href="projects.html" class="btn btn-ghost" style="font-size:var(--text-sm)">
+            Ver todos <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+        <div id="projects-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--space-4)">
+          <!-- Se llena desde JS -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/mock.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      requireAuth('../pages/login.html');
+      lucide.createIcons();
+      await Promise.all([loadDashboardKPIs(), loadProjects(), initEnergyChart(), loadActivity()]);
+
+      // Time filter buttons
+      document.querySelectorAll('.time-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          // TODO: re-fetch chart data for selected range
+        });
+      });
+    });
+
+    async function loadDashboardKPIs() {
+      try {
+        const stats = await fetchOrMock(ENDPOINTS.dashboard, MOCK.dashboard);
+        document.getElementById('kpi-projects').textContent = stats.total_projects ?? '—';
+        document.getElementById('kpi-sims').textContent     = stats.total_simulations ?? '—';
+        document.getElementById('kpi-co2').innerHTML =
+          `${formatNumber(stats.co2_reduced ?? 0, 0)} <span>kg</span>`;
+        document.getElementById('kpi-profiles').textContent = stats.total_profiles ?? '—';
+        const t = stats.trends || MOCK.dashboard.trends;
+        document.getElementById('kpi-projects-trend').innerHTML  = `<i data-lucide="minus"></i> ${t.projects || '—'}`;
+        document.getElementById('kpi-sims-trend').innerHTML      = `<i data-lucide="trending-up"></i> ${t.simulations || '—'}`;
+        document.getElementById('kpi-co2-trend').innerHTML       = `<i data-lucide="trending-up"></i> ${t.co2 || '—'}`;
+        document.getElementById('kpi-profiles-trend').innerHTML  = `<i data-lucide="minus"></i> ${t.profiles || '—'}`;
+        lucide.createIcons();
+      } catch (_) {}
+    }
+
+    function initEnergyChart() {
+      const ctx = document.getElementById('energy-chart');
+      if (!ctx) return;
+      const h = MOCK.simulationResult.hourly;
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: h.labels,
+          datasets: [
+            {
+              label: 'Generación (kWh)',
+              data: h.generation,
+              borderColor: 'var(--cyan)',
+              backgroundColor: 'rgba(0,229,255,0.07)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4
+            },
+            {
+              label: 'Consumo (kWh)',
+              data: h.consumption,
+              borderColor: '#7c3aed',
+              backgroundColor: 'rgba(124,58,237,0.07)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4
+            },
+            {
+              label: 'Batería (kWh)',
+              data: h.battery,
+              borderColor: '#ffa000',
+              backgroundColor: 'rgba(255,160,0,0.05)',
+              fill: false,
+              tension: 0.4,
+              borderWidth: 1.5,
+              borderDash: [4, 4],
+              pointRadius: 0,
+              pointHoverRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(8,18,23,0.95)',
+              borderColor: 'rgba(0,229,255,0.2)',
+              borderWidth: 1,
+              titleColor: '#c9e8f0',
+              bodyColor: '#8ab8c4',
+              padding: 10
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: 'var(--text3)', font: { size: 10 }, maxTicksLimit: 8 },
+              grid: { color: 'rgba(0,229,255,0.05)' }
+            },
+            y: {
+              ticks: { color: 'var(--text3)', font: { size: 10 } },
+              grid: { color: 'rgba(0,229,255,0.05)' }
+            }
+          }
+        }
+      });
+    }
+
+    async function loadActivity() {
+      const feed = document.getElementById('activity-feed');
+      if (!feed) return;
+      const icons = { simulation: 'zap', project: 'folder-plus', profile: 'file-up', alert: 'alert-triangle' };
+      const types = { simulation: 'info', project: 'success', profile: 'info', alert: 'warn' };
+      feed.innerHTML = MOCK.activity.map(a => `
+        <div class="alert-item ${types[a.type] || 'info'}">
+          <i data-lucide="${icons[a.type] || 'activity'}"></i>
+          <div class="alert-item-content">
+            <div class="alert-item-title">${escapeHtml(a.msg)}</div>
+            <div class="alert-item-desc">${a.time}</div>
+          </div>
+        </div>`).join('');
+      lucide.createIcons();
+    }
+  </script>
+
+</body>
+</html>

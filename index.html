@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Grid Dynamics — Herramienta de simulación para optimizar microrredes eléctricas en comunidades urbanas.">
+  <title>Grid Dynamics — Optimización de Microrredes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/index.js" defer></script>
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/landing.css">
+
+  <style>
+    /* Logo SVG inline nav */
+    .logo-hex { fill: none; stroke: var(--cyan); }
+    .logo-bolt { fill: var(--cyan); }
+  </style>
+</head>
+<body>
+
+  <!-- SKIP LINK -->
+  <a href="#main" class="sr-only" style="position:fixed;top:8px;left:8px;z-index:99999;background:var(--cyan);color:#050a0d;padding:8px 16px;border-radius:4px;font-weight:700">
+    Saltar al contenido
+  </a>
+
+  <!-- NAV -->
+  <nav class="landing-nav" role="navigation" aria-label="Navegación principal">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Grid Dynamics — Inicio">
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <polygon class="logo-hex" points="18,2 34,10 34,26 18,34 2,26 2,10" stroke-width="1.5"/>
+          <polygon class="logo-hex" points="18,8 28,13 28,23 18,28 8,23 8,13" stroke-width="0.5" opacity="0.3"/>
+          <path class="logo-bolt" d="M18 10 L22 16 L20 16 L20 26 L16 26 L16 16 L14 16 Z"/>
+          <circle class="logo-bolt" cx="18" cy="10" r="2" opacity="0.7"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">GRID</span>
+          <span class="logo-sub">DYNAMICS</span>
+        </div>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#features" class="nav-link-item">Características</a></li>
+        <li><a href="#modules" class="nav-link-item">Módulos</a></li>
+        <li><a href="#about" class="nav-link-item">Nosotros</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="pages/login.html" class="btn btn-ghost btn-sm">Ingresar</a>
+        <a href="pages/register.html" class="btn btn-primary btn-sm">
+          <i class="ph-duotone ph-rocket-launch" aria-hidden="true"></i>
+          Comenzar
+        </a>
+      </div>
+
+      <button class="hamburger" id="mobile-menu-toggle"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+        <i class="ph-duotone ph-list" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobile-menu" hidden role="menu">
+      <ul role="list">
+        <li><a href="#features" role="menuitem">Características</a></li>
+        <li><a href="#modules" role="menuitem">Módulos</a></li>
+        <li><a href="#about" role="menuitem">Nosotros</a></li>
+        <li><a href="pages/login.html" role="menuitem">Ingresar</a></li>
+        <li><a href="pages/register.html" role="menuitem">Registrarse</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <!-- Grid de líneas decorativas -->
+      <div class="hero-grid-lines" aria-hidden="true">
+        <div class="h-line" style="top:20%"></div>
+        <div class="h-line" style="top:50%"></div>
+        <div class="h-line" style="top:80%"></div>
+        <div class="v-line" style="left:20%"></div>
+        <div class="v-line" style="left:50%"></div>
+        <div class="v-line" style="left:80%"></div>
+      </div>
+
+      <div class="container">
+        <div class="hero-content">
+          <div>
+            <div class="hero-tag">
+              <span class="badge badge-cyber">
+                <i class="ph-duotone ph-leaf" aria-hidden="true"></i>
+                GreenTech · Simulación Energética
+              </span>
+            </div>
+
+            <div class="hero-title" id="hero-title">
+              <span class="hero-title-top">Herramienta de</span>
+              <span class="hero-title-main glitch-text" data-text="MICRORRED">MICRORRED</span>
+              <span class="hero-title-accent">Eléctrica Inteligente</span>
+            </div>
+
+            <p class="hero-subtitle">
+              Diseña, simula y optimiza redes eléctricas en barrios urbanos antes de invertir.
+              <span class="text-cyan">Decisiones basadas en datos reales,</span> no en suposiciones.
+            </p>
+
+            <div class="hero-actions">
+              <a href="pages/register.html" class="btn btn-primary btn-lg">
+                <i class="ph-duotone ph-rocket-launch" aria-hidden="true"></i>
+                Comenzar gratis
+              </a>
+              <a href="#modules" class="btn btn-outline btn-lg">
+                <i class="ph-duotone ph-play" aria-hidden="true"></i>
+                Ver módulos
+              </a>
+            </div>
+
+            <div class="hero-stats" role="list" aria-label="Métricas del proyecto">
+              <div class="stat-item" role="listitem">
+                <span class="stat-num">&lt;3s</span>
+                <span class="stat-label">Tiempo de<br>simulación</span>
+              </div>
+              <div class="stat-divider" aria-hidden="true"></div>
+              <div class="stat-item" role="listitem">
+                <span class="stat-num">50+</span>
+                <span class="stat-label">Nodos por<br>proyecto</span>
+              </div>
+              <div class="stat-divider" aria-hidden="true"></div>
+              <div class="stat-item" role="listitem">
+                <span class="stat-num">CSV</span>
+                <span class="stat-label">Importación<br>de datos</span>
+              </div>
+              <div class="stat-divider" aria-hidden="true"></div>
+              <div class="stat-item" role="listitem">
+                <span class="stat-num">99%</span>
+                <span class="stat-label">Uptime<br>garantizado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagrama de red decorativo -->
+      <div class="hero-diagram" aria-hidden="true">
+        <svg class="network-svg" viewBox="0 0 400 350" fill="none">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- Conexiones -->
+          <line x1="200" y1="80" x2="100" y2="180" stroke="#00e5ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+          <line x1="200" y1="80" x2="300" y2="180" stroke="#00e5ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+          <line x1="100" y1="180" x2="100" y2="280" stroke="#00e5ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+          <line x1="300" y1="180" x2="300" y2="280" stroke="#00e5ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+          <line x1="100" y1="280" x2="200" y2="320" stroke="#00e5ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.3"/>
+          <line x1="300" y1="280" x2="200" y2="320" stroke="#00e5ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.3"/>
+          <!-- Nodos -->
+          <g filter="url(#glow)">
+            <circle cx="200" cy="80" r="18" fill="#0a1a20" stroke="#00e5ff" stroke-width="1.5"/>
+            <text x="200" y="85" text-anchor="middle" fill="#00e5ff" font-size="11" font-family="Rajdhani">SOL</text>
+            <circle cx="100" cy="180" r="16" fill="#0a1a20" stroke="#00bcd4" stroke-width="1.5"/>
+            <text x="100" y="185" text-anchor="middle" fill="#00bcd4" font-size="10" font-family="Rajdhani">BAT</text>
+            <circle cx="300" cy="180" r="16" fill="#0a1a20" stroke="#00bcd4" stroke-width="1.5"/>
+            <text x="300" y="185" text-anchor="middle" fill="#00bcd4" font-size="10" font-family="Rajdhani">RED</text>
+            <circle cx="100" cy="280" r="14" fill="#0a1a20" stroke="#4dd0e1" stroke-width="1"/>
+            <text x="100" y="285" text-anchor="middle" fill="#4dd0e1" font-size="9" font-family="Rajdhani">V1</text>
+            <circle cx="300" cy="280" r="14" fill="#0a1a20" stroke="#4dd0e1" stroke-width="1"/>
+            <text x="300" y="285" text-anchor="middle" fill="#4dd0e1" font-size="9" font-family="Rajdhani">V2</text>
+            <circle cx="200" cy="320" r="14" fill="#0a1a20" stroke="#4dd0e1" stroke-width="1"/>
+            <text x="200" y="325" text-anchor="middle" fill="#4dd0e1" font-size="9" font-family="Rajdhani">V3</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section-features" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">
+            <i class="ph-duotone ph-star" aria-hidden="true"></i>
+            Funcionalidades
+          </span>
+          <h2 id="features-title">Todo lo que necesitas para optimizar una microrred</h2>
+          <p>Desde el diseño visual hasta el análisis de resultados, Grid Dynamics cubre el flujo completo de validación energética.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="card feature-card featured">
+            <div class="feature-icon"><i class="ph-duotone ph-graph" aria-hidden="true"></i></div>
+            <h3>Editor Visual de Topología</h3>
+            <p>Diseña la red de tu barrio mediante drag & drop. Agrega viviendas, paneles solares, baterías y conexiones eléctricas sin escribir una sola línea de código.</p>
+            <span class="badge badge-cyber feature-tag">RFU-001 · RFU-002</span>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-icon"><i class="ph-duotone ph-lightning" aria-hidden="true"></i></div>
+            <h3>Motor de Simulación Energética</h3>
+            <p>Calcula el flujo de potencia y balance energético en menos de 3 segundos para topologías básicas, con soporte asíncrono para redes complejas.</p>
+            <span class="badge badge-cyber feature-tag">RFU-005 · RNF-001</span>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-icon"><i class="ph-duotone ph-file-csv" aria-hidden="true"></i></div>
+            <h3>Importación de Perfiles CSV</h3>
+            <p>Carga datos históricos de consumo energético real de tu comunidad. El sistema valida el formato y los integra directamente en la simulación.</p>
+            <span class="badge badge-cyber feature-tag">RFU-004</span>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-icon"><i class="ph-duotone ph-chart-line-up" aria-hidden="true"></i></div>
+            <h3>Análisis y Resultados Gráficos</h3>
+            <p>Visualiza consumo vs. generación, pérdidas, costo total y emisiones de CO₂ estimadas mediante gráficas interactivas y tablas comparativas.</p>
+            <span class="badge badge-cyber feature-tag">RFU-006 · RFU-007</span>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-icon"><i class="ph-duotone ph-arrows-left-right" aria-hidden="true"></i></div>
+            <h3>Comparación de Escenarios</h3>
+            <p>Guarda múltiples configuraciones de microrred y compáralas lado a lado para identificar la solución más eficiente y rentable para tu comunidad.</p>
+            <span class="badge badge-cyber feature-tag">RFU-003 · RFU-007</span>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-icon"><i class="ph-duotone ph-lock-key" aria-hidden="true"></i></div>
+            <h3>Seguridad y Persistencia</h3>
+            <p>Credenciales cifradas, datos almacenados en Supabase con encriptación, y sesiones protegidas mediante tokens JWT con refresco automático.</p>
+            <span class="badge badge-cyber feature-tag">RNF-004 · RNF-005</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÓDULOS -->
+    <section class="section-modules" id="modules" aria-labelledby="modules-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">
+            <i class="ph-duotone ph-cube" aria-hidden="true"></i>
+            Arquitectura modular
+          </span>
+          <h2 id="modules-title">Cuatro módulos, un flujo de trabajo unificado</h2>
+        </div>
+
+        <div class="modules-layout">
+          <div class="modules-list" role="list">
+            <button class="module-item active" data-module="topology" role="listitem" aria-pressed="true">
+              <div class="module-icon"><i class="ph-duotone ph-graph" aria-hidden="true"></i></div>
+              <div class="module-info">
+                <strong>Gestión de Microrred</strong>
+                <span>Editor visual · CRUD · Parámetros</span>
+              </div>
+              <i class="ph-duotone ph-caret-right module-arrow" aria-hidden="true"></i>
+            </button>
+            <button class="module-item" data-module="simulation" role="listitem" aria-pressed="false">
+              <div class="module-icon"><i class="ph-duotone ph-lightning" aria-hidden="true"></i></div>
+              <div class="module-info">
+                <strong>Motor de Simulación</strong>
+                <span>Balance energético · Escenarios</span>
+              </div>
+              <i class="ph-duotone ph-caret-right module-arrow" aria-hidden="true"></i>
+            </button>
+            <button class="module-item" data-module="analytics" role="listitem" aria-pressed="false">
+              <div class="module-icon"><i class="ph-duotone ph-chart-bar" aria-hidden="true"></i></div>
+              <div class="module-info">
+                <strong>Análisis y Resultados</strong>
+                <span>Gráficas · Indicadores · Alertas</span>
+              </div>
+              <i class="ph-duotone ph-caret-right module-arrow" aria-hidden="true"></i>
+            </button>
+            <button class="module-item" data-module="users" role="listitem" aria-pressed="false">
+              <div class="module-icon"><i class="ph-duotone ph-users" aria-hidden="true"></i></div>
+              <div class="module-info">
+                <strong>Gestión de Usuarios</strong>
+                <span>Roles · Autenticación · Seguridad</span>
+              </div>
+              <i class="ph-duotone ph-caret-right module-arrow" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="card modules-detail" id="module-detail">
+            <div class="module-detail-content">
+              <h3><i class="ph-duotone ph-graph" aria-hidden="true"></i> Gestión de Microrred</h3>
+              <p>Diseña topologías de red mediante un editor visual interactivo. Agrega viviendas, paneles solares, baterías y fuentes externas mediante drag & drop.</p>
+              <ul role="list" class="module-features-list">
+                <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i>Editor de nodos con propiedades eléctricas</li>
+                <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i>Configuración de consumo (kWh), generación y almacenamiento</li>
+                <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i>CRUD completo de configuraciones</li>
+                <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i>Importación de perfiles CSV</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section class="section-about" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-layout">
+          <div class="about-info">
+            <span class="section-tag">
+              <i class="ph-duotone ph-buildings" aria-hidden="true"></i>
+              Quiénes somos
+            </span>
+            <h2 id="about-title">Una startup GreenTech nacida en la UPC</h2>
+            <p>Grid Dynamics nació del problema real que enfrentan las comunidades urbanas: invertir en energías renovables sin datos concretos. Nuestra misión es democratizar el acceso a herramientas de simulación energética.</p>
+            <div class="about-pillars">
+              <div class="pillar">
+                <i class="ph-duotone ph-target" aria-hidden="true"></i>
+                <div>
+                  <strong>Misión</strong>
+                  <p>Impulsar la eficiencia energética mediante software de simulación avanzado, permitiendo a las comunidades tomar decisiones basadas en datos para un futuro renovable.</p>
+                </div>
+              </div>
+              <div class="pillar">
+                <i class="ph-duotone ph-eye" aria-hidden="true"></i>
+                <div>
+                  <strong>Visión</strong>
+                  <p>Convertirnos en la plataforma líder de diseño de microrredes en Latinoamérica, promoviendo la independencia energética para el 2030.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-team">
+            <h3 class="team-title">Equipo de desarrollo</h3>
+            <div class="team-list">
+              <div class="team-member">
+                <i class="ph-duotone ph-user-circle member-avatar" aria-hidden="true"></i>
+                <div class="member-info">
+                  <strong>Jairo Rosales</strong>
+                  <span>CRUD configuraciones</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <i class="ph-duotone ph-user-circle member-avatar" aria-hidden="true"></i>
+                <div class="member-info">
+                  <strong>Abner Feril</strong>
+                  <span>Formulario dinámico</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <i class="ph-duotone ph-user-circle member-avatar" aria-hidden="true"></i>
+                <div class="member-info">
+                  <strong>Gengis Cam</strong>
+                  <span>Parser CSV</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <i class="ph-duotone ph-user-circle member-avatar" aria-hidden="true"></i>
+                <div class="member-info">
+                  <strong>Ryusei Murakami</strong>
+                  <span>Visualización métricas</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <i class="ph-duotone ph-user-circle member-avatar" aria-hidden="true"></i>
+                <div class="member-info">
+                  <strong>Alejandro Cusco</strong>
+                  <span>Motor simulación</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <i class="ph-duotone ph-user-circle member-avatar" aria-hidden="true"></i>
+                <div class="member-info">
+                  <strong>Johan Moreno</strong>
+                  <span>Editor canvas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="section-cta" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="card cta-box">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <div class="cta-icon"><i class="ph-duotone ph-lightning" aria-hidden="true"></i></div>
+          <h2 id="cta-title">¿Listo para optimizar tu microrred?</h2>
+          <p>Únete a Grid Dynamics y comienza a tomar decisiones energéticas basadas en datos reales. Crea tu cuenta gratis en menos de un minuto.</p>
+          <div class="cta-actions">
+            <a href="pages/register.html" class="btn btn-primary btn-lg">
+              <i class="ph-duotone ph-rocket-launch" aria-hidden="true"></i>
+              Crear cuenta gratuita
+            </a>
+            <a href="pages/login.html" class="btn btn-outline btn-lg">
+              <i class="ph-duotone ph-sign-in" aria-hidden="true"></i>
+              Ya tengo cuenta
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="landing-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" aria-label="Grid Dynamics">
+            <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+              <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+              <path d="M18 10 L22 16 L20 16 L20 26 L16 26 L16 16 L14 16 Z" fill="#00e5ff"/>
+            </svg>
+            <div class="logo-text">
+              <span class="logo-name">GRID DYNAMICS</span>
+              <span class="logo-sub">GreenTech · Lima, Perú · 2026</span>
+            </div>
+          </a>
+          <p>Herramienta de simulación para optimizar microrredes eléctricas en comunidades urbanas.</p>
+        </div>
+        <nav class="footer-links" aria-label="Mapa del sitio">
+          <div>
+            <strong>Producto</strong>
+            <ul role="list">
+              <li><a href="#features">Características</a></li>
+              <li><a href="#modules">Módulos</a></li>
+              <li><a href="pages/register.html">Comenzar gratis</a></li>
+            </ul>
+          </div>
+          <div>
+            <strong>Plataforma</strong>
+            <ul role="list">
+              <li><a href="pages/login.html">Ingresar</a></li>
+              <li><a href="pages/dashboard.html">Dashboard</a></li>
+              <li><a href="pages/editor.html">Editor</a></li>
+            </ul>
+          </div>
+          <div>
+            <strong>Proyecto</strong>
+            <ul role="list">
+              <li><a href="#about">Equipo</a></li>
+              <li><a href="#" target="_blank" rel="noopener noreferrer">UPC SI771</a></li>
+              <li><a href="#" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <p class="footer-copy">
+        &copy; 2026 Grid Dynamics · Universidad Peruana de Ciencias Aplicadas ·
+        Diseño y Patrones de Software SI771
+      </p>
+    </div>
+  </footer>
+
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>

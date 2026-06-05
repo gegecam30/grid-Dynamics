@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestión de proyectos de microrred — Grid Dynamics. Crea, edita y elimina proyectos de optimización energética.">
+  <title>Proyectos — Grid Dynamics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <style>
+    /* ---- Project Card ---- */
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 0;
+      overflow: hidden;
+      transition: transform 0.2s var(--ease-cyber), box-shadow 0.2s;
+    }
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .project-card-header {
+      padding: var(--space-5) var(--space-5) var(--space-3);
+      border-bottom: 1px solid rgba(0,229,255,0.06);
+    }
+    .project-card-title {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-2);
+      line-height: 1.3;
+    }
+    .project-card-desc {
+      font-size: var(--text-sm);
+      color: var(--text2);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .project-card-meta {
+      padding: var(--space-3) var(--space-5);
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(0,229,255,0.06);
+    }
+    .project-meta-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--text3);
+      font-family: var(--font-mono);
+    }
+    .project-meta-item svg {
+      width: 13px; height: 13px;
+      stroke-width: 1.75;
+      flex-shrink: 0;
+    }
+    .project-card-footer {
+      padding: var(--space-3) var(--space-5);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: rgba(0,229,255,0.02);
+    }
+    .project-card-footer .btn {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-3);
+      height: 32px;
+    }
+    .project-card-footer .spacer { flex: 1; }
+    .btn-icon-danger {
+      width: 32px; height: 32px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,50,80,0.2);
+      background: transparent;
+      color: rgba(255,50,80,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-icon-danger svg { width: 14px; height: 14px; stroke-width: 2; }
+    .btn-icon-danger:hover {
+      border-color: #ff3250;
+      color: #ff3250;
+      background: rgba(255,50,80,0.1);
+    }
+
+    /* ---- projects grid header status strip ---- */
+    .project-card-status-strip {
+      height: 3px;
+      width: 100%;
+    }
+    .project-card-status-strip.running   { background: linear-gradient(90deg, #00e564, transparent); }
+    .project-card-status-strip.completed { background: linear-gradient(90deg, var(--cyan), transparent); }
+    .project-card-status-strip.draft     { background: linear-gradient(90deg, rgba(255,255,255,0.15), transparent); }
+    .project-card-status-strip.error     { background: linear-gradient(90deg, #ff3250, transparent); }
+    .project-card-status-strip.pending   { background: linear-gradient(90deg, #ffa000, transparent); }
+
+    /* ---- Page header ---- */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .page-header-info h1 {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-1);
+    }
+    .page-header-info p {
+      font-size: var(--text-sm);
+      color: var(--text2);
+    }
+    .page-header-actions { display: flex; gap: var(--space-3); align-items: center; flex-shrink: 0; }
+
+    /* Results counter */
+    .results-count {
+      font-size: var(--text-xs);
+      color: var(--text3);
+      font-family: var(--font-mono);
+      margin-bottom: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-orb ambient-orb-1" aria-hidden="true"></div>
+  <div class="ambient-orb ambient-orb-2" aria-hidden="true"></div>
+
+  <div class="app-layout">
+
+    <!-- TOPBAR -->
+    <header class="topbar" role="banner">
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir navegación" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <a href="dashboard.html" class="topbar-logo" aria-label="Grid Dynamics — Inicio">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="var(--cyan)" stroke-width="1.5"/>
+          <path d="M18 10 L22 16 L20 16 L20 26 L16 26 L16 16 L14 16 Z" fill="var(--cyan)"/>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">GRID</span>
+          <span class="logo-sub">DYNAMICS</span>
+        </div>
+      </a>
+      <nav class="topbar-nav" aria-label="Navegación principal">
+        <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="projects.html" class="topnav-link active"><i data-lucide="folder"></i>Proyectos</a>
+        <a href="editor.html" class="topnav-link"><i data-lucide="network"></i>Editor</a>
+        <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+        <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+        <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+        <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" id="notif-btn" aria-label="Notificaciones">
+          <i data-lucide="bell"></i>
+          <span class="badge-dot" aria-hidden="true"></span>
+        </button>
+        <div class="user-chip" id="user-chip" role="button" tabindex="0" aria-label="Menú de usuario" aria-haspopup="true">
+          <div class="user-avatar"><i data-lucide="user"></i></div>
+          <div class="user-chip-info">
+            <strong data-user-name>Cargando...</strong>
+            <span data-user-role>Rol</span>
+          </div>
+          <i data-lucide="chevron-down" class="chevron"></i>
+          <div class="user-dropdown" role="menu">
+            <div class="user-dropdown-header" data-user-name>—</div>
+            <a href="settings.html" class="user-dropdown-item" role="menuitem">
+              <i data-lucide="settings"></i>Configuración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <button class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <i data-lucide="log-out"></i>Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile nav drawer -->
+    <nav class="nav-drawer" id="nav-drawer" aria-label="Navegación móvil">
+      <a href="dashboard.html" class="topnav-link"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="projects.html" class="topnav-link active"><i data-lucide="folder"></i>Proyectos</a>
+      <a href="editor.html" class="topnav-link"><i data-lucide="network"></i>Editor</a>
+      <a href="simulate.html" class="topnav-link"><i data-lucide="zap"></i>Simulación</a>
+      <a href="results.html" class="topnav-link"><i data-lucide="trending-up"></i>Resultados</a>
+      <a href="profiles.html" class="topnav-link"><i data-lucide="file-spreadsheet"></i>Perfiles</a>
+      <a href="scenarios.html" class="topnav-link"><i data-lucide="git-compare"></i>Escenarios</a>
+      <div class="nav-drawer-divider"></div>
+      <a href="settings.html" class="topnav-link"><i data-lucide="settings"></i>Configuración</a>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content" id="main">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-info">
+          <h1>Mis Proyectos</h1>
+          <p>Crea y gestiona tus proyectos de optimización de microrred.</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-primary" id="open-create-modal" aria-haspopup="dialog">
+            <i data-lucide="plus"></i>
+            Nuevo Proyecto
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar" role="search" aria-label="Filtrar proyectos">
+        <div class="search-wrap">
+          <i data-lucide="search"></i>
+          <input
+            type="search"
+            class="input"
+            id="search-input"
+            placeholder="Buscar proyectos..."
+            aria-label="Buscar proyectos"
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="filter-chips-group" role="group" aria-label="Filtrar por estado" style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
+          <button class="filter-chip active" data-filter="all" aria-pressed="true">Todos</button>
+          <button class="filter-chip" data-filter="running" aria-pressed="false">
+            <span class="status-dot running" style="font-size:0;width:7px;height:7px;display:inline-block;border-radius:50%;background:#00e564;box-shadow:0 0 6px #00e564;"></span>
+            Activo
+          </button>
+          <button class="filter-chip" data-filter="completed" aria-pressed="false">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></span>
+            Completado
+          </button>
+          <button class="filter-chip" data-filter="draft" aria-pressed="false">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--text3);"></span>
+            Borrador
+          </button>
+          <button class="filter-chip" data-filter="error" aria-pressed="false">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#ff3250;box-shadow:0 0 6px #ff3250;"></span>
+            Error
+          </button>
+        </div>
+      </div>
+
+      <!-- Results count -->
+      <div class="results-count" id="results-count" aria-live="polite" aria-atomic="true"></div>
+
+      <!-- Projects Grid -->
+      <div
+        id="projects-grid"
+        style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:var(--space-4);"
+        aria-label="Lista de proyectos"
+        role="list"
+      >
+        <!-- Se llena desde projects.js -->
+      </div>
+
+      <!-- Empty State (hidden by default) -->
+      <div class="empty-state" id="empty-state" hidden aria-hidden="true">
+        <div class="empty-state-icon" aria-hidden="true">
+          <i data-lucide="folder-x"></i>
+        </div>
+        <h3>Sin proyectos</h3>
+        <p>No encontramos proyectos que coincidan con tu búsqueda. Prueba otro término o crea uno nuevo.</p>
+        <button class="btn btn-primary" id="empty-create-btn">
+          <i data-lucide="plus"></i>
+          Nuevo Proyecto
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ==================== MODAL: NUEVO PROYECTO ==================== -->
+  <div class="modal-overlay" id="create-modal" role="dialog" aria-modal="true" aria-labelledby="create-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="create-modal-title">
+          <i data-lucide="folder-plus"></i>
+          Nuevo Proyecto
+        </div>
+        <button class="modal-close" id="close-create-modal" aria-label="Cerrar modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form id="create-project-form" novalidate>
+        <div class="form-group">
+          <label class="label" for="project-name">
+            Nombre del proyecto
+            <span style="color:#ff3250;margin-left:2px" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="text"
+            class="input"
+            id="project-name"
+            name="name"
+            placeholder="Ej. Microrred Residencial Norte"
+            required
+            autocomplete="off"
+            maxlength="80"
+          >
+          <div class="field-error" id="name-error" role="alert" style="display:none;color:#ff3250;font-size:var(--text-xs);margin-top:var(--space-1);"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="project-desc">
+            Descripción
+            <span style="color:var(--text3);font-size:var(--text-xs);margin-left:var(--space-2)">(opcional)</span>
+          </label>
+          <textarea
+            class="textarea"
+            id="project-desc"
+            name="description"
+            placeholder="Describe brevemente el alcance y objetivos del proyecto..."
+            rows="3"
+            maxlength="300"
+          ></textarea>
+          <div style="text-align:right;font-size:var(--text-xs);color:var(--text3);margin-top:2px;">
+            <span id="desc-count">0</span>/300
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="project-type">Tipo de red</label>
+          <select class="select" id="project-type" name="type">
+            <option value="residential">Residencial</option>
+            <option value="commercial">Comercial</option>
+            <option value="industrial">Industrial</option>
+            <option value="mixed">Mixta</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="cancel-create-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="create-project-btn">
+            <i data-lucide="save"></i>
+            Crear Proyecto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- ==================== FIN MODAL ==================== -->
+
+  <script src="../js/config.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/mock.js"></script>
+  <script src="../js/projects.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth('../pages/login.html');
+      lucide.createIcons();
+      initProjects();
+    });
+  </script>
+</body>
+</html>
